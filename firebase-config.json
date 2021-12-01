@@ -1,0 +1,9 @@
+{
+  "apiKey": "AIzaSyCKAqc16ODquNK4IKsqYZ3vEumGoIF1rEs",
+  "authDomain": "pychat-bcfbc.firebaseapp.com",
+  "projectId": "pychat-bcfbc",
+  "databaseURL": "https://pychat-bcfbc-default-rtdb.firebaseio.com",
+  "storageBucket": "pychat-bcfbc.appspot.com",
+  "messagingSenderId": "378361268201",
+  "appId": "1:378361268201:web:ce6dab328457e6072f6d78"
+}
