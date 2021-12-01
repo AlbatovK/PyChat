@@ -1,7 +1,7 @@
 import time
 
 
-class Message(object):
+class Message:
 
     def __init__(self, data, to_id, date=time.ctime()):
         self.data = data

@@ -18,6 +18,7 @@ class EnteringWindow(QMainWindow):
         def on_user_loaded(_):
             self.chat_window = ChatWindow()
             self.chat_window.show()
+            self.close()
 
         user_loaded_observer = Observer(on_user_loaded)
         self.viewModel.userLive.add_observer(user_loaded_observer)

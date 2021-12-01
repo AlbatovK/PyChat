@@ -1,7 +1,8 @@
 class MainRepo:
 
     def __init__(self):
-        self.firebase_instance, self.current_user, self.user_impl = None, None, None
+        self.firebase_instance, self.current_user = None, None
+        self.user_impl, self.to_user = None, None
 
     def provide_firebase_instance(self):
         return self.firebase_instance

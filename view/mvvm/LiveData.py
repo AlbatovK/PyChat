@@ -8,9 +8,10 @@ class LiveData:
         return self.data
 
     def set_value(self, data):
-        self.data = data
-        for observer in self.observers:
-            observer.callback(data)
+        if not self == data:
+            self.data = data
+            for observer in self.observers:
+                observer.callback(data)
 
     def add_observer(self, observer):
         self.observers.append(observer)
