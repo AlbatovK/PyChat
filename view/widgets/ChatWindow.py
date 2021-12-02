@@ -25,8 +25,13 @@ class ChatWindow(QMainWindow):
         observer = Observer(on_messages_changed)
         self.viewModel.messagesLive.add_observer(observer)
 
-        for user in self.viewModel.users:
-            self.users_list.addItem(user.nickname)
+        def on_users_changed(users):
+            self.users_list.clear()
+            for item in users:
+                self.users_list.addItem(item.nickname)
+
+        users_changed = Observer(on_users_changed)
+        self.viewModel.usersLive.add_observer(users_changed)
 
         def on_click(item: QListWidgetItem):
             self.viewModel.set_to_user(item.text())
@@ -38,8 +43,9 @@ class ChatWindow(QMainWindow):
         def on_send():
             data = self.msg_input.text()
             self.msg_input.clear()
-            self.viewModel.send_msg(data)
-            self.messages_list.clear()
-            self.viewModel.fulfil_messages()
+            if self.viewModel.is_sending_enabled():
+                self.viewModel.send_msg(data)
+                self.messages_list.clear()
+                self.viewModel.fulfil_messages()
 
         self.send_btn.clicked.connect(on_send)

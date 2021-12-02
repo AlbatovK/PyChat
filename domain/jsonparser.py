@@ -15,7 +15,6 @@ def parse_from_file(read_file):
 
 
 def parse_messages(response: PyreResponse):
-
     def parse_single(item):
         value = item.val()
         return Message(value["data"], value["to_id"], value["date"])
