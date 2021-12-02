@@ -17,6 +17,7 @@ class ChatWindow(QMainWindow):
         uic.loadUi(get_layout_path("chat.ui"), self)
 
         def on_messages_changed(messages):
+            self.messages_list.clear()
             if messages is not None:
                 for msg in messages:
                     self.messages_list.addItem(msg)
@@ -36,6 +37,7 @@ class ChatWindow(QMainWindow):
 
         def on_send():
             data = self.msg_input.text()
+            self.msg_input.clear()
             self.viewModel.send_msg(data)
             self.messages_list.clear()
             self.viewModel.fulfil_messages()

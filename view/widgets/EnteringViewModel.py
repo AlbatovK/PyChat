@@ -13,8 +13,9 @@ class EnteringViewModel(object):
         self.userLive = LiveData()
         self.invalid_inputLive = LiveData()
         self.repo = mainRepo
-        self.auth = mainRepo.firebase_instance.auth()
-        self.dao = UserDao(mainRepo.firebase_instance)
+        firebase = mainRepo.provide_firebase_instance()
+        self.auth = firebase.auth()
+        self.dao = UserDao(firebase)
 
     def sign_in(self, login, password):
         try:
@@ -36,8 +37,8 @@ class EnteringViewModel(object):
             self.invalid_inputLive.set_value(msg)
             print(code, msg)
 
-    def create_and_save_user(self, login, user):
-        mainRepo.current_user = user
-        mainRepo.user_impl = User(login, user["userId"])
-        self.userLive.set_value(mainRepo.user_impl)
-        self.dao.insert_user(mainRepo.user_impl)
+    def create_and_save_user(self, login, user: dict):
+        user_impl = User(login, user["userId"])
+        mainRepo.set_current_user(user_impl)
+        self.userLive.set_value(user_impl)
+        self.dao.insert_user(user_impl)

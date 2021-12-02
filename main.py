@@ -15,7 +15,7 @@ def establish_firebase():
 
 if __name__ == "__main__":
     firebase = establish_firebase()
-    mainRepo.firebase_instance = firebase
+    mainRepo.initialize(firebase)
     app = QApplication(sys.argv)
     window = EnteringWindow()
     window.show()
