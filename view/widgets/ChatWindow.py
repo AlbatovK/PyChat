@@ -1,5 +1,5 @@
 from PyQt5 import uic
-from PyQt5.QtWidgets import QMainWindow, QListWidgetItem
+from PyQt5.QtWidgets import QMainWindow, QListWidgetItem, QListWidget
 
 from domain.assetmanager import get_layout_path
 from view.mvvm.Observer import Observer
@@ -17,6 +17,7 @@ class ChatWindow(QMainWindow):
         uic.loadUi(get_layout_path("chat.ui"), self)
 
         def on_messages_changed(messages):
+            print("new")
             self.messages_list.clear()
             if messages is not None:
                 for msg in messages:

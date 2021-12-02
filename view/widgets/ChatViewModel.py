@@ -1,4 +1,5 @@
 import time
+from datetime import datetime
 from threading import Thread
 
 from model.MainRepo import mainRepo
@@ -43,25 +44,27 @@ class ChatViewModel(object):
 
     def fulfil_messages(self):
         if self.to_user is not None:
-            messages = self.msg_dao.get_messages(self.to_user)
-            res = []
+            valid = []
 
-            for msg in messages:
-                if msg.to_id == mainRepo.provide_current_user().id:
-                    res.append(msg.data)
+            messages = self.msg_dao.get_messages(self.to_user)
+            valid_his = [msg for msg in messages if msg.to_id == mainRepo.provide_current_user().id]
+            valid.extend(valid_his)
 
             my_messages = self.msg_dao.get_messages(mainRepo.provide_current_user())
+            valid_my = [msg for msg in my_messages if msg.to_id == self.to_user.id]
+            valid.extend(valid_my)
 
-            for msg in my_messages:
-                if msg.to_id == self.to_user.id:
-                    res.append(msg.data)
+            for msg in valid:
+                msg.date = datetime.strptime(msg.date, "%a %b %d %H:%M:%S %Y")
+            valid.sort(key=lambda x: x.date)
+            res = list(map(lambda x: x.data, valid))
 
             if len(res) == 0:
                 res.append("Начните диалог первым!")
             self.messagesLive.set_value(res)
 
     def send_msg(self, data):
-        message = Message(data, self.to_user.id)
+        message = Message(data, self.to_user.id, time.ctime())
         self.msg_dao.insert_message(mainRepo.provide_current_user(), message)
         self.messagesLive.set_value(self.messagesLive.get_value().append(data))
 
@@ -75,7 +78,7 @@ class ChatViewModel(object):
                 if not user.nickname == mainRepo.provide_current_user().nickname:
                     res.append(user)
             if len(res) == 0:
-                res = [User("Поиск других аккаунтов", 123)]
+                res = [User("Поиск других аккаунтов", 0)]
             self.usersLive.set_value(res)
         except TypeError:
             self.usersLive.set_value([])

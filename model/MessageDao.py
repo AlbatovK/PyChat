@@ -15,8 +15,8 @@ class MessageDao:
         self.db.child("users").child(from_user.id).child("messages").push(msg)
 
     def get_messages(self, user: User):
-        messages = self.db.child("users").child(user.id).child("messages").get()
         try:
+            messages = self.db.child("users").child(user.id).child("messages").get()
             return parse_messages(messages)
         except TypeError:
             return []
