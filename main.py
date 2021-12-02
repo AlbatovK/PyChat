@@ -1,5 +1,9 @@
 import sys
 
+from PyQt5.QtCore import QFile, QTextStream
+
+import theme_resources
+
 from PyQt5.QtWidgets import QApplication
 from pyrebase import pyrebase
 
@@ -17,6 +21,12 @@ if __name__ == "__main__":
     firebase = establish_firebase()
     mainRepo.initialize(firebase)
     app = QApplication(sys.argv)
+
+    file = QFile(":/dark/stylesheet.qss")
+    file.open(QFile.ReadOnly | QFile.Text)
+    stream = QTextStream(file)
+    app.setStyleSheet(stream.readAll())
+
     window = EnteringWindow()
     window.show()
     sys.exit(app.exec())
