@@ -38,7 +38,7 @@ class EnteringViewModel(object):
             print(code, msg)
 
     def create_and_save_user(self, login, user: dict):
-        user_impl = User(login, user["userId"])
+        user_impl = User(login, user["userId"], active=True)
         mainRepo.set_current_user(user_impl)
-        self.userLive.set_value(user_impl)
         self.dao.insert_user(user_impl)
+        self.userLive.set_value(user_impl)

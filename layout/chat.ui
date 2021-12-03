@@ -24,9 +24,9 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>11</y>
+      <y>21</y>
       <width>271</width>
-      <height>541</height>
+      <height>531</height>
      </rect>
     </property>
     <property name="font">
@@ -41,9 +41,9 @@
    <widget class="QPushButton" name="send_btn">
     <property name="geometry">
      <rect>
-      <x>720</x>
-      <y>500</y>
-      <width>51</width>
+      <x>700</x>
+      <y>510</y>
+      <width>71</width>
       <height>41</height>
      </rect>
     </property>
@@ -54,8 +54,8 @@
    <widget class="QLineEdit" name="msg_input">
     <property name="geometry">
      <rect>
-      <x>470</x>
-      <y>500</y>
+      <x>450</x>
+      <y>510</y>
       <width>241</width>
       <height>41</height>
      </rect>
@@ -64,11 +64,37 @@
    <widget class="QListWidget" name="messages_list">
     <property name="geometry">
      <rect>
-      <x>470</x>
+      <x>450</x>
       <y>20</y>
-      <width>301</width>
+      <width>321</width>
       <height>471</height>
      </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="exit_btn">
+    <property name="geometry">
+     <rect>
+      <x>300</x>
+      <y>20</y>
+      <width>51</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="refresh_btn">
+    <property name="geometry">
+     <rect>
+      <x>300</x>
+      <y>80</y>
+      <width>51</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
     </property>
    </widget>
   </widget>

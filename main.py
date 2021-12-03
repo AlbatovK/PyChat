@@ -1,12 +1,9 @@
 import sys
 
 from PyQt5.QtCore import QFile, QTextStream
-
-import theme_resources
-
 from PyQt5.QtWidgets import QApplication
 from pyrebase import pyrebase
-
+import theme_resources
 from domain.assetmanager import get_config
 from model.MainRepo import mainRepo
 from view.widgets.EnteringWindow import EnteringWindow

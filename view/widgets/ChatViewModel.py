@@ -9,7 +9,8 @@ from model.User import User
 from model.UserDao import UserDao
 from view.mvvm.LiveData import LiveData
 
-DELTA_SEC = 3.0
+DELTA_USER_UPDATE_SEC = 20.0
+DELTA_MSGS_UPDATE_SEC = 3.0
 
 
 class ChatViewModel(object):
@@ -32,11 +33,10 @@ class ChatViewModel(object):
 
     def update_msg_list(self):
         while True:
-            time.sleep(DELTA_SEC)
+            time.sleep(DELTA_MSGS_UPDATE_SEC)
             self.fulfil_messages()
 
     def set_to_user(self, nickname):
-        print(nickname)
         for user in self.usersLive.get_value():
             if nickname == user.nickname:
                 self.to_user = user
@@ -61,6 +61,7 @@ class ChatViewModel(object):
 
             if len(res) == 0:
                 res.append("Начните диалог первым!")
+
             self.messagesLive.set_value(res)
 
     def send_msg(self, data):
@@ -85,5 +86,12 @@ class ChatViewModel(object):
 
     def update_users_list(self):
         while True:
-            time.sleep(DELTA_SEC)
             self.set_users_list()
+            time.sleep(DELTA_USER_UPDATE_SEC)
+
+    def stop(self):
+        self.update_thread_users.join(0)
+        self.update_thread_msg.join(0)
+
+    def update_user_status(self):
+        self.user_dao.update_user_status(mainRepo.provide_current_user(), False)
