@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Пользователи | Чат</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QListWidget" name="users_list">
@@ -60,6 +60,14 @@
       <height>41</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="placeholderText">
+     <string>Введите сообщение</string>
+    </property>
    </widget>
    <widget class="QListWidget" name="messages_list">
     <property name="geometry">
@@ -69,6 +77,23 @@
       <width>321</width>
       <height>471</height>
      </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="horizontalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOff</enum>
+    </property>
+    <property name="sizeAdjustPolicy">
+     <enum>QAbstractScrollArea::AdjustToContentsOnFirstShow</enum>
     </property>
    </widget>
    <widget class="QPushButton" name="exit_btn">

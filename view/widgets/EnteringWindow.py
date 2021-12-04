@@ -1,8 +1,7 @@
 from PyQt5 import uic
-from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import *
+from PyQt5.QtWidgets import QMainWindow
 
-from domain.assetmanager import get_layout_path, get_drawable_path
+from domain.assetmanager import get_layout_path
 from domain.stringextensions import error_to_hint
 from view.mvvm.Observer import Observer
 from view.widgets.ChatWindow import ChatWindow
@@ -33,8 +32,6 @@ class EnteringWindow(QMainWindow):
 
     def init_ui(self):
         uic.loadUi(get_layout_path("enter.ui"), self)
-        pixmap = QPixmap(get_drawable_path("icon.png"))
-        self.logo_label.setPixmap(pixmap)
 
         self.sign_in_btn.clicked.connect(self.sign_in)
         self.sign_up_btn.clicked.connect(self.sign_up)

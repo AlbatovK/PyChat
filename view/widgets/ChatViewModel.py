@@ -19,8 +19,9 @@ class ChatViewModel(object):
         self.firebase = mainRepo.provide_firebase_instance()
         self.user_dao = UserDao(self.firebase)
         self.msg_dao = MessageDao(self.firebase)
-        self.usersLive = LiveData()
+        self.usersLive = LiveData([])
         self.messagesLive = LiveData()
+        self.messages = []
         self.to_user = None
 
         self.set_users_list()
@@ -40,6 +41,7 @@ class ChatViewModel(object):
         for user in self.usersLive.get_value():
             if nickname == user.nickname:
                 self.to_user = user
+                self.messages = []
                 break
 
     def fulfil_messages(self):
@@ -61,8 +63,10 @@ class ChatViewModel(object):
 
             if len(res) == 0:
                 res.append("Начните диалог первым!")
-
-            self.messagesLive.set_value(res)
+                self.messagesLive.set_value([])
+            else:
+                self.messagesLive.set_value(res[len(self.messages): len(res)])
+                self.messages = res.copy()
 
     def send_msg(self, data):
         message = Message(data, self.to_user.id, time.ctime())
@@ -80,6 +84,7 @@ class ChatViewModel(object):
                     res.append(user)
             if len(res) == 0:
                 res = [User("Поиск других аккаунтов", 0)]
+            res = sorted(res, key=lambda x: x.active, reverse=True)
             self.usersLive.set_value(res)
         except TypeError:
             self.usersLive.set_value([])
