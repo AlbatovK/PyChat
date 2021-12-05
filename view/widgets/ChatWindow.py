@@ -1,28 +1,24 @@
-import time
-from threading import Thread
-
 from PyQt5 import uic, QtCore
-from PyQt5.QtCore import QSize, QMetaMethod
+from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QMainWindow, QListWidgetItem, QListWidget
+from PyQt5.QtWidgets import QMainWindow, QListWidgetItem
 
 from domain.assetmanager import get_layout_path, get_drawable_path
 from view.mvvm.Observer import Observer
-from view.widgets.ChatViewModel import ChatViewModel
+from view.widgets.ChatViewModel import ChatViewModel, DELTA_USER_UPDATE_SEC, DELTA_MSGS_UPDATE_SEC
 
+MAX_LINE_LENGTH = 40
 
 class ChatWindow(QMainWindow):
 
     def __init__(self):
         super().__init__()
         self.viewModel = ChatViewModel()
-        self.loaded_msgs = []
         self.init_ui()
 
     def init_ui(self):
         uic.loadUi(get_layout_path("chat.ui"), self)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
-        self.users_list.setSortingEnabled(False)
 
         self.exit_btn.setIcon(QIcon(get_drawable_path("exit.png")))
         self.exit_btn.setIconSize(QSize(25, 25))
@@ -31,12 +27,28 @@ class ChatWindow(QMainWindow):
         self.send_btn.setIcon(QIcon(get_drawable_path("send.png")))
         self.send_btn.setIconSize(QSize(30, 30))
 
+        hints = [
+            f"Вы зашли под пользователем {self.viewModel.get_current_user_name()}",
+            "Выберите пользователя из списка чтобы увидеть переписку.",
+            "Для обновления списка пользователей или выхода из",
+            "приложения нажмите соответствующую кнопку.",
+            "Списки пользователей и сообщения автоматически",
+            f"обновляются соот-но каждые {int(DELTA_USER_UPDATE_SEC)} и {int(DELTA_MSGS_UPDATE_SEC)} секунд (-ы).",
+            "\n",
+            "Репозиторий на GitHub - https://github.com/AlbatovK/PyChat",
+        ]
+
+        for hint in hints:
+            self.messages_list.addItem(hint)
+
         def on_messages_changed(messages):
             if self.messages_list.count() == 1 and self.messages_list.item(0).text() == "Начните диалог первым!":
                 self.messages_list.clear()
 
             if messages is not None:
                 for msg in messages:
+                    if len(msg) > MAX_LINE_LENGTH:
+                        msg = msg[:MAX_LINE_LENGTH].strip() + "\n" + msg[MAX_LINE_LENGTH:].strip()
                     self.messages_list.addItem(msg)
                     self.messages_list.scrollToBottom()
                 if not messages and self.messages_list.count() == 0:
@@ -66,7 +78,7 @@ class ChatWindow(QMainWindow):
         def on_send():
             data = self.msg_input.text()
             self.msg_input.clear()
-            if self.viewModel.is_sending_enabled():
+            if self.viewModel.is_sending_enabled() and not data == '':
                 self.viewModel.send_msg(data)
                 self.viewModel.fulfil_messages()
                 self.messages_list.scrollToBottom()

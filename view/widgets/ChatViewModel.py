@@ -23,6 +23,7 @@ class ChatViewModel(object):
         self.messagesLive = LiveData()
         self.messages = []
         self.to_user = None
+        self.current_user = mainRepo.provide_current_user()
 
         self.set_users_list()
 
@@ -100,3 +101,6 @@ class ChatViewModel(object):
 
     def update_user_status(self):
         self.user_dao.update_user_status(mainRepo.provide_current_user(), False)
+
+    def get_current_user_name(self):
+        return self.current_user.nickname

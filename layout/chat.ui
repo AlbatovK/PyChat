@@ -34,8 +34,14 @@
       <pointsize>14</pointsize>
      </font>
     </property>
+    <property name="toolTip">
+     <string>Список доступных пользователей</string>
+    </property>
+    <property name="toolTipDuration">
+     <number>-3</number>
+    </property>
     <property name="sortingEnabled">
-     <bool>true</bool>
+     <bool>false</bool>
     </property>
    </widget>
    <widget class="QPushButton" name="send_btn">
@@ -54,9 +60,9 @@
    <widget class="QLineEdit" name="msg_input">
     <property name="geometry">
      <rect>
-      <x>450</x>
+      <x>360</x>
       <y>510</y>
-      <width>241</width>
+      <width>331</width>
       <height>41</height>
      </rect>
     </property>
@@ -72,9 +78,9 @@
    <widget class="QListWidget" name="messages_list">
     <property name="geometry">
      <rect>
-      <x>450</x>
+      <x>360</x>
       <y>20</y>
-      <width>321</width>
+      <width>411</width>
       <height>471</height>
      </rect>
     </property>
@@ -89,11 +95,26 @@
       <pointsize>10</pointsize>
      </font>
     </property>
+    <property name="toolTip">
+     <string>Ваш диалог с данным пользователем</string>
+    </property>
+    <property name="toolTipDuration">
+     <number>-3</number>
+    </property>
+    <property name="lineWidth">
+     <number>0</number>
+    </property>
     <property name="horizontalScrollBarPolicy">
-     <enum>Qt::ScrollBarAlwaysOff</enum>
+     <enum>Qt::ScrollBarAsNeeded</enum>
     </property>
     <property name="sizeAdjustPolicy">
      <enum>QAbstractScrollArea::AdjustToContentsOnFirstShow</enum>
+    </property>
+    <property name="showDropIndicator" stdset="0">
+     <bool>false</bool>
+    </property>
+    <property name="selectionMode">
+     <enum>QAbstractItemView::NoSelection</enum>
     </property>
    </widget>
    <widget class="QPushButton" name="exit_btn">
@@ -104,6 +125,9 @@
       <width>51</width>
       <height>51</height>
      </rect>
+    </property>
+    <property name="toolTip">
+     <string>Выйти</string>
     </property>
     <property name="text">
      <string/>
@@ -117,6 +141,9 @@
       <width>51</width>
       <height>51</height>
      </rect>
+    </property>
+    <property name="toolTip">
+     <string>Обновить</string>
     </property>
     <property name="text">
      <string/>
