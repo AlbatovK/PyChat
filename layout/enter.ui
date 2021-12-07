@@ -10,6 +10,12 @@
     <height>541</height>
    </rect>
   </property>
+  <property name="font">
+   <font>
+    <family>Arial</family>
+    <pointsize>10</pointsize>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>Регистрация | Вход</string>
   </property>
@@ -121,14 +127,14 @@ p, li { white-space: pre-wrap; }
     </property>
     <property name="font">
      <font>
-      <pointsize>10</pointsize>
+      <pointsize>11</pointsize>
      </font>
     </property>
     <property name="inputMethodHints">
      <set>Qt::ImhNone</set>
     </property>
     <property name="text">
-     <string>Sign in</string>
+     <string>Sign In</string>
     </property>
    </widget>
    <widget class="QPushButton" name="sign_up_btn">
@@ -142,14 +148,14 @@ p, li { white-space: pre-wrap; }
     </property>
     <property name="font">
      <font>
-      <pointsize>10</pointsize>
+      <pointsize>11</pointsize>
      </font>
     </property>
     <property name="inputMethodHints">
      <set>Qt::ImhNone</set>
     </property>
     <property name="text">
-     <string>Sign up</string>
+     <string>Sign Up</string>
     </property>
    </widget>
    <widget class="QLabel" name="error_label">
@@ -170,7 +176,7 @@ p, li { white-space: pre-wrap; }
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">QLabel { color : red; }</string>
+     <string notr="true">QLabel { color : lightgrey; }</string>
     </property>
     <property name="text">
      <string/>
@@ -189,6 +195,27 @@ p, li { white-space: pre-wrap; }
      <string/>
     </property>
    </widget>
+   <widget class="QLabel" name="hint_label">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>200</y>
+      <width>221</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -196,7 +223,7 @@ p, li { white-space: pre-wrap; }
      <x>0</x>
      <y>0</y>
      <width>500</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>

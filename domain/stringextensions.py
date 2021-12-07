@@ -8,5 +8,5 @@ hint_dict = {
 }
 
 
-def error_to_hint(err_str: str):
+def error_to_hint(err_str: str) -> str:
     return hint_dict.get(err_str, "Неизвестная ошибка")

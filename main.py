@@ -14,16 +14,17 @@ def establish_firebase():
     return pyrebase.initialize_app(firebase_config)
 
 
+def load_theme(application: QApplication):
+    file = QFile(":/dark/stylesheet.qss")
+    file.open(QFile.ReadOnly | QFile.Text)
+    data = QTextStream(file).readAll()
+    application.setStyleSheet(data)
+
+
 if __name__ == "__main__":
     firebase = establish_firebase()
     mainRepo.initialize(firebase)
     app = QApplication(sys.argv)
-
-    file = QFile(":/dark/stylesheet.qss")
-    file.open(QFile.ReadOnly | QFile.Text)
-    stream = QTextStream(file)
-    app.setStyleSheet(stream.readAll())
-
-    window = EnteringWindow()
-    window.show()
+    load_theme(app)
+    EnteringWindow().show()
     sys.exit(app.exec())

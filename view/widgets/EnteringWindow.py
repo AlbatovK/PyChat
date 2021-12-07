@@ -1,4 +1,5 @@
 from PyQt5 import uic
+from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QMainWindow
 
 from domain.assetmanager import get_layout_path
@@ -10,17 +11,23 @@ from view.widgets.EnteringViewModel import EnteringViewModel
 
 class EnteringWindow(QMainWindow):
 
+    request_finished = pyqtSignal()
+
     def __init__(self):
         super().__init__()
         self.viewModel = EnteringViewModel()
 
-        def on_user_loaded(_):
+        self.init_view_model()
+        self.init_ui()
+
+    def init_view_model(self):
+
+        def on_finished():
+            self.close()
             self.chat_window = ChatWindow()
             self.chat_window.show()
-            self.close()
 
-        user_loaded_observer = Observer(on_user_loaded)
-        self.viewModel.userLive.add_observer(user_loaded_observer)
+        self.request_finished.connect(on_finished)
 
         def on_invalid_input(msg):
             hint = error_to_hint(msg)
@@ -28,7 +35,6 @@ class EnteringWindow(QMainWindow):
 
         invalid_input_observer = Observer(on_invalid_input)
         self.viewModel.invalid_inputLive.add_observer(invalid_input_observer)
-        self.init_ui()
 
     def init_ui(self):
         uic.loadUi(get_layout_path("enter.ui"), self)
@@ -40,8 +46,8 @@ class EnteringWindow(QMainWindow):
 
     def sign_in(self):
         login, password = self.login_input.toPlainText(), self.password_input.toPlainText()
-        self.viewModel.sign_in(login, password)
+        self.viewModel.sign_in_threaded(login, password, self.request_finished)
 
     def sign_up(self):
         login, password = self.login_input.toPlainText(), self.password_input.toPlainText()
-        self.viewModel.sign_up(login, password)
+        self.viewModel.sign_up_threaded(login, password, self.request_finished)

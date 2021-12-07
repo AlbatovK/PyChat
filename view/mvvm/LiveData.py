@@ -1,17 +1,33 @@
+from typing import Any
+
+
 class LiveData:
 
-    def __init__(self, data=''):
-        self.data = data
-        self.observers = []
+    def __init__(self, data=None):
+        self.__data = data
+        self.__observers = []
 
-    def get_value(self):
-        return self.data
+    @property
+    def data(self):
+        return self.__data
 
-    def set_value(self, data):
-        if not self == data:
-            self.data = data
-            for observer in self.observers:
-                observer.callback(data)
+    @data.getter
+    def data(self):
+        return self.__data
+
+    @data.setter
+    def data(self, data: Any):
+        self.__data = data
+        for observer in self.__observers:
+            observer.callback(data)
+
+    @property
+    def observers(self):
+        return self.__observers
+
+    @observers.getter
+    def observers(self):
+        return self.__observers
 
     def add_observer(self, observer):
-        self.observers.append(observer)
+        self.__observers.append(observer)

@@ -1,5 +1,4 @@
 import time
-from datetime import datetime
 from threading import Thread
 
 from model.MainRepo import mainRepo
@@ -9,7 +8,7 @@ from model.User import User
 from model.UserDao import UserDao
 from view.mvvm.LiveData import LiveData
 
-DELTA_USER_UPDATE_SEC = 20.0
+DELTA_USER_UPDATE_SEC = 60.0
 DELTA_MSGS_UPDATE_SEC = 3.0
 
 
@@ -24,7 +23,7 @@ class ChatViewModel(object):
         self.messages = []
         self.to_user = None
         self.current_user = mainRepo.provide_current_user()
-
+        a: Message
         self.set_users_list()
 
         self.update_thread_msg = Thread(target=self.update_msg_list)
@@ -39,7 +38,7 @@ class ChatViewModel(object):
             self.fulfil_messages()
 
     def set_to_user(self, nickname):
-        for user in self.usersLive.get_value():
+        for user in self.usersLive.data:
             if nickname == user.nickname:
                 self.to_user = user
                 self.messages = []
@@ -49,30 +48,32 @@ class ChatViewModel(object):
         if self.to_user is not None:
             valid = []
 
-            messages = self.msg_dao.get_messages(self.to_user)
-            valid_his = [msg for msg in messages if msg.to_id == mainRepo.provide_current_user().id]
-            valid.extend(valid_his)
+            his = self.msg_dao.get_messages(self.to_user, self.current_user)
+            valid.extend(his)
 
-            my_messages = self.msg_dao.get_messages(mainRepo.provide_current_user())
-            valid_my = [msg for msg in my_messages if msg.to_id == self.to_user.id]
-            valid.extend(valid_my)
+            my = self.msg_dao.get_messages(self.current_user, self.to_user)
+            valid.extend(my)
 
-            for msg in valid:
-                msg.date = datetime.strptime(msg.date, "%a %b %d %H:%M:%S %Y")
             valid.sort(key=lambda x: x.date)
             res = list(map(lambda x: x.data, valid))
 
             if len(res) == 0:
                 res.append("Начните диалог первым!")
-                self.messagesLive.set_value([])
+                self.messagesLive.data = []
             else:
-                self.messagesLive.set_value(res[len(self.messages): len(res)])
+                self.messagesLive.data = res[len(self.messages): len(res)]
                 self.messages = res.copy()
 
+    def fulfil_messages_threaded(self):
+        Thread(target=self.fulfil_messages, daemon=False).start()
+
     def send_msg(self, data):
-        message = Message(data, self.to_user.id, time.ctime())
-        self.msg_dao.insert_message(mainRepo.provide_current_user(), message)
-        self.messagesLive.set_value(self.messagesLive.get_value().append(data))
+        message = Message(data, time.ctime())
+        self.msg_dao.insert_message(self.current_user, self.to_user, message)
+        self.messagesLive.data = self.messagesLive.data.append(data)
+
+    def send_msg_threaded(self, data):
+        Thread(target=self.send_msg, args=[data], daemon=False).start()
 
     def is_sending_enabled(self):
         return self.to_user is not None
@@ -86,9 +87,12 @@ class ChatViewModel(object):
             if len(res) == 0:
                 res = [User("Поиск других аккаунтов", 0)]
             res = sorted(res, key=lambda x: x.active, reverse=True)
-            self.usersLive.set_value(res)
+            self.usersLive.data = res
         except TypeError:
-            self.usersLive.set_value([])
+            self.usersLive.data = []
+
+    def set_users_list_threaded(self):
+        Thread(target=self.set_users_list, daemon=False).start()
 
     def update_users_list(self):
         while True:
@@ -101,6 +105,9 @@ class ChatViewModel(object):
 
     def update_user_status(self):
         self.user_dao.update_user_status(mainRepo.provide_current_user(), False)
+
+    def update_user_status_threaded(self):
+        Thread(target=self.update_user_status, daemon=False).start()
 
     def get_current_user_name(self):
         return self.current_user.nickname
