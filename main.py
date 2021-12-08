@@ -1,12 +1,11 @@
 import sys
 
-from PyQt5.QtCore import QFile, QTextStream
 from PyQt5.QtWidgets import QApplication
 from pyrebase import pyrebase
-import theme_resources
-from domain.assetmanager import get_config
-from model.MainRepo import mainRepo
+from domain.assetmanager import get_config, load_theme
+from model.repo.MainRepo import mainRepo
 from view.widgets.EnteringWindow import EnteringWindow
+import app_theme_resources
 
 
 def establish_firebase():
@@ -14,17 +13,15 @@ def establish_firebase():
     return pyrebase.initialize_app(firebase_config)
 
 
-def load_theme(application: QApplication):
-    file = QFile(":/dark/stylesheet.qss")
-    file.open(QFile.ReadOnly | QFile.Text)
-    data = QTextStream(file).readAll()
-    application.setStyleSheet(data)
+def load_dark_theme(application: QApplication):
+    style_sheet = load_theme(":/dark/stylesheet.qss")
+    application.setStyleSheet(style_sheet)
 
 
 if __name__ == "__main__":
     firebase = establish_firebase()
     mainRepo.initialize(firebase)
     app = QApplication(sys.argv)
-    load_theme(app)
+    load_dark_theme(app)
     EnteringWindow().show()
     sys.exit(app.exec())

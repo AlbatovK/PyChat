@@ -5,6 +5,7 @@ from requests import HTTPError
 from typing import List
 
 from model.Message import Message
+from model.User import User
 
 
 def parse_error_response(e: HTTPError):
@@ -20,4 +21,14 @@ def parse_messages(response: PyreResponse) -> List[Message]:
     def parse_single(item: PyreResponse) -> Message:
         return Message(item.val()["data"], item.val()["date"])
 
-    return list(map(parse_single, response.each()))
+    map_query = map(parse_single, response.each())
+    return list(map_query)
+
+
+def parse_users(response: PyreResponse) -> List[User]:
+
+    def parse_single(item: PyreResponse):
+        return User(item.val()['nickname'], item.key(), True if str(item.val()['active']) == "True" else False)
+
+    map_query = map(parse_single, response.each())
+    return list(map_query)

@@ -6,7 +6,7 @@ from domain.assetmanager import get_layout_path
 from domain.stringextensions import error_to_hint
 from view.mvvm.Observer import Observer
 from view.widgets.ChatWindow import ChatWindow
-from view.widgets.EnteringViewModel import EnteringViewModel
+from view.widgets.viewmodel.EnteringViewModel import EnteringViewModel
 
 
 class EnteringWindow(QMainWindow):
@@ -38,6 +38,7 @@ class EnteringWindow(QMainWindow):
 
     def init_ui(self):
         uic.loadUi(get_layout_path("enter.ui"), self)
+        self.setFixedSize(500, 540)
 
         self.sign_in_btn.clicked.connect(self.sign_in)
         self.sign_up_btn.clicked.connect(self.sign_up)

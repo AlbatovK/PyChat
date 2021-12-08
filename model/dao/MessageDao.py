@@ -17,8 +17,5 @@ class MessageDao:
         self.__db.child("users").child(from_user.id).child("messages").child(to_user.id).push(msg)
 
     def get_messages(self, from_user: User, to_user: User) -> List[Message]:
-        try:
-            messages = self.__db.child("users").child(from_user.id).child("messages").child(to_user.id).get()
-            return parse_messages(messages)
-        except TypeError:
-            return []
+        messages = self.__db.child("users").child(from_user.id).child("messages").child(to_user.id).get()
+        return parse_messages(messages) if messages.each() is not None else []

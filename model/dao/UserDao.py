@@ -1,7 +1,8 @@
 from typing import List
 
-from pyrebase.pyrebase import Firebase, PyreResponse
+from pyrebase.pyrebase import Firebase
 
+from domain.jsonparser import parse_users
 from model.User import User
 
 
@@ -19,10 +20,5 @@ class UserDao:
         self.__db.child("users").child(user.id).update(update_dict)
 
     def get_all_users(self) -> List[User]:
-        all_users = self.__db.child("users").get().each()
-
-        def parse_single(item: PyreResponse):
-            return User(item.val()['nickname'], item.key(), True if str(item.val()['active']) == "True" else False)
-
-        map_query = map(parse_single, all_users)
-        return list(map_query)
+        all_users = self.__db.child("users").get()
+        return parse_users(all_users) if all_users.each() is not None else []

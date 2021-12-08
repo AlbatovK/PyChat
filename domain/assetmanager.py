@@ -1,10 +1,11 @@
 from os import path
 
+from PyQt5.QtCore import QFile, QTextStream
+from PyQt5.QtGui import QIcon
+
 from domain.jsonparser import parse_from_file
 
-config_name = "firebase-config.json"
-layout_dir = "layout"
-drawable_dir = "drawable"
+config_name, layout_dir, drawable_dir = "firebase-config.json", "layout", "drawable"
 
 
 def get_layout_path(filename: str) -> str:
@@ -21,3 +22,14 @@ def get_config() -> str:
     src = path.dirname(__file__)[:-6:] + config_name
     with open(src, 'r') as config_file:
         return parse_from_file(config_file)
+
+
+def load_theme(theme_file: str) -> str:
+    file = QFile(theme_file)
+    file.open(QFile.ReadOnly | QFile.Text)
+    return QTextStream(file).readAll()
+
+
+def get_icon(filename):
+    name = get_drawable_path(filename)
+    return QIcon(name)

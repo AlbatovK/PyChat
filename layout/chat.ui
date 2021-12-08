@@ -164,6 +164,9 @@
     <property name="text">
      <string/>
     </property>
+    <property name="icon">
+     <iconset theme="settings"/>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
