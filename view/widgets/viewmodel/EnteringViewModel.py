@@ -53,5 +53,6 @@ class EnteringViewModel(object):
     def create_and_save_user(self, login, user: dict) -> User:
         user_impl = User(login, user["userId"], active=True)
         mainRepo.set_current_user(user_impl)
+        mainRepo.set_current_firebase_user(user)
         self.dao.insert_user(user_impl)
         return user_impl
