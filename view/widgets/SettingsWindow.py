@@ -8,7 +8,6 @@ from view.widgets.viewmodel.SettingsViewModel import SettingsViewModel
 
 
 class SettingsWindow(QMainWindow):
-
     close_signal = pyqtSignal()
 
     def __init__(self, close_signal):
