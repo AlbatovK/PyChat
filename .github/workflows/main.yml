@@ -21,3 +21,7 @@ jobs:
     - name: build with pyinstaller
       run: |
         pyinstaller main.py
+    - name: Packaging
+      uses: JackMcKew/pyinstaller-action-windows@v0.1.2
+      with:
+        path: ${{ github.workspace }}
