@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
+    <width>1700</width>
     <height>600</height>
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -47,7 +47,7 @@
    <widget class="QPushButton" name="send_btn">
     <property name="geometry">
      <rect>
-      <x>700</x>
+      <x>810</x>
       <y>510</y>
       <width>71</width>
       <height>41</height>
@@ -62,7 +62,7 @@
      <rect>
       <x>360</x>
       <y>510</y>
-      <width>331</width>
+      <width>431</width>
       <height>41</height>
      </rect>
     </property>
@@ -80,8 +80,8 @@
      <rect>
       <x>360</x>
       <y>20</y>
-      <width>411</width>
-      <height>471</height>
+      <width>520</width>
+      <height>470</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -165,7 +165,8 @@
      <string/>
     </property>
     <property name="icon">
-     <iconset theme="settings"/>
+     <iconset theme="settings">
+      <normaloff>.</normaloff>.</iconset>
     </property>
    </widget>
   </widget>
@@ -174,7 +175,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>1500</width>
      <height>21</height>
     </rect>
    </property>

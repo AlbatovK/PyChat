@@ -1,4 +1,4 @@
-from PyQt5 import uic
+from PyQt5 import uic, QtWidgets
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QMainWindow
 
@@ -39,6 +39,7 @@ class EnteringWindow(QMainWindow):
     def init_ui(self):
         uic.loadUi(get_layout_path("enter.ui"), self)
         self.setFixedSize(500, 540)
+        self.password_input.setEchoMode(QtWidgets.QLineEdit.Password)
 
         self.sign_in_btn.clicked.connect(self.sign_in)
         self.sign_up_btn.clicked.connect(self.sign_up)
@@ -46,9 +47,9 @@ class EnteringWindow(QMainWindow):
         self.password_input.cursorPositionChanged.connect(lambda: self.error_label.setText(''))
 
     def sign_in(self):
-        login, password = self.login_input.toPlainText(), self.password_input.toPlainText()
+        login, password = self.login_input.text(), self.password_input.text()
         self.viewModel.sign_in_threaded(login, password, self.request_finished)
 
     def sign_up(self):
-        login, password = self.login_input.toPlainText(), self.password_input.toPlainText()
+        login, password = self.login_input.text(), self.password_input.text()
         self.viewModel.sign_up_threaded(login, password, self.request_finished)

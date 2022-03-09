@@ -3,16 +3,14 @@ from PyQt5.QtCore import QSize, pyqtSignal
 from PyQt5.QtWidgets import QMainWindow, QListWidgetItem
 
 from domain.assetmanager import get_layout_path, get_icon
-from model.dao.SettingsDao import SettingsDao
 from view.mvvm.Observer import Observer
 from view.widgets.viewmodel.ChatViewModel import ChatViewModel
 from view.widgets.SettingsWindow import SettingsWindow
 
-MAX_LINE_LENGTH = 40
+MAX_LINE_LENGTH = 60
 
 
 class ChatWindow(QMainWindow):
-
     show_request = pyqtSignal()
 
     def __init__(self):
@@ -21,9 +19,28 @@ class ChatWindow(QMainWindow):
 
         self.init_ui()
 
+    def on_send(self):
+        data = self.msg_input.text()
+        self.msg_input.clear()
+        if self.viewModel.is_sending_enabled() and not data == '':
+            self.viewModel.send_msg(data)
+            self.viewModel.fulfil_messages()
+            self.messages_list.scrollToBottom()
+
+    def keyPressEvent(self, e):
+        if e.key() == QtCore.Qt.Key_Return:
+            self.on_send()
+        elif e.key() == QtCore.Qt.Key_Escape:
+            self.exit_app()
+
+    def exit_app(self):
+        self.viewModel.update_user_status()
+        self.viewModel.stop_updating()
+        self.destroy(True, True)
+
     def init_ui(self):
         uic.loadUi(get_layout_path("chat.ui"), self)
-        self.setFixedSize(800, 600)
+        self.setFixedSize(900, 600)
         self.viewModel.load_theme()
 
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
@@ -47,10 +64,16 @@ class ChatWindow(QMainWindow):
 
             if messages is not None:
                 for msg in messages:
+                    res = msg
                     if len(msg) > MAX_LINE_LENGTH:
-                        msg = msg[:MAX_LINE_LENGTH].strip() + "\n" + msg[MAX_LINE_LENGTH:].strip()
+                        str_buffer, res = '', ''
+                        for word in msg.split(' '):
+                            str_buffer += word + ' '
+                            if len(str_buffer) > MAX_LINE_LENGTH:
+                                res += str_buffer.rstrip() + "\n"
+                                str_buffer = ''
 
-                    self.messages_list.addItem(msg)
+                    self.messages_list.addItem(res)
                     self.messages_list.scrollToBottom()
                 if not messages and self.messages_list.count() == 0:
                     self.messages_list.addItem("Начните диалог первым!")
@@ -77,26 +100,14 @@ class ChatWindow(QMainWindow):
 
         self.users_list.itemClicked.connect(on_click)
 
-        def on_send():
-            data = self.msg_input.text()
-            self.msg_input.clear()
-            if self.viewModel.is_sending_enabled() and not data == '':
-                self.viewModel.send_msg(data)
-                self.viewModel.fulfil_messages()
-                self.messages_list.scrollToBottom()
-
-        self.send_btn.clicked.connect(on_send)
+        self.send_btn.clicked.connect(self.on_send)
 
         def refresh_users():
             self.viewModel.set_users_list()
 
         self.refresh_btn.clicked.connect(refresh_users)
 
-        def exit_app():
-            self.viewModel.update_user_status()
-            self.destroy(True, True)
-
-        self.exit_btn.clicked.connect(exit_app)
+        self.exit_btn.clicked.connect(self.exit_app)
 
         def show_settings():
             self.hide()

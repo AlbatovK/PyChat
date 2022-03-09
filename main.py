@@ -5,7 +5,7 @@ from pyrebase import pyrebase
 from domain.assetmanager import get_config, load_theme
 from model.repo.MainRepo import mainRepo
 from view.widgets.EnteringWindow import EnteringWindow
-import app_theme_resources
+import assets.app_theme_resources
 
 
 def establish_firebase():

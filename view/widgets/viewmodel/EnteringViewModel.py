@@ -1,5 +1,6 @@
 from threading import Thread
 
+import requests
 from requests import HTTPError
 
 from domain.jsonparser import parse_error_response
@@ -31,6 +32,8 @@ class EnteringViewModel(object):
             code, msg = parse_error_response(e)
             self.invalid_inputLive.data = msg
             print(code, msg)
+        except requests.exceptions.ConnectionError:
+            self.invalid_inputLive.data = "INVALID_CONNECTION"
 
     def sign_in_threaded(self, login, password, signal_finish):
         Thread(target=self.sign_in, args=[login, password, signal_finish], daemon=False).start()
@@ -46,6 +49,8 @@ class EnteringViewModel(object):
             code, msg = parse_error_response(e)
             self.invalid_inputLive.data = msg
             print(code, msg)
+        except requests.exceptions.ConnectionError:
+            self.invalid_inputLive.data = "INVALID_CONNECTION"
 
     def sign_up_threaded(self, login, password, signal_finish):
         Thread(target=self.sign_up, args=[login, password, signal_finish], daemon=False).start()

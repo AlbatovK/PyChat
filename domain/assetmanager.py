@@ -5,7 +5,7 @@ from PyQt5.QtGui import QIcon
 
 from domain.jsonparser import parse_from_file
 
-config_name, layout_dir, drawable_dir = "firebase-config.json", "layout", "drawable"
+config_name, layout_dir, drawable_dir, assets_dir = "firebase-config.json", "layout", "drawable", "assets"
 
 
 def get_layout_path(filename: str) -> str:
@@ -18,8 +18,12 @@ def get_drawable_path(filename: str) -> str:
     return path.dirname(__file__)[:-6:] + drawable_dir + "\\" + filename
 
 
+def get_assets_path(filename: str) -> str:
+    return path.dirname(__file__)[:-6:] + assets_dir + "\\" + filename
+
+
 def get_config() -> str:
-    src = path.dirname(__file__)[:-6:] + config_name
+    src = get_assets_path(config_name)
     with open(src, 'r') as config_file:
         return parse_from_file(config_file)
 

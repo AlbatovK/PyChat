@@ -32,6 +32,7 @@ class ChatViewModel(object):
 
         self.messages = []
         self.to_user = None
+        self.active = True
 
         self.set_users_list()
 
@@ -56,7 +57,7 @@ class ChatViewModel(object):
         load_light_theme() if theme == Theme.LIGHT else load_dark_theme()
 
     def update_msg_list(self):
-        while True:
+        while self.active:
             time.sleep(DELTA_MSGS_UPDATE_SEC)
             self.fulfil_messages()
 
@@ -106,7 +107,7 @@ class ChatViewModel(object):
         self.usersLive.data = res
 
     def update_users_list(self):
-        while True:
+        while self.active:
             self.set_users_list()
             time.sleep(DELTA_USER_UPDATE_SEC)
 
@@ -115,3 +116,6 @@ class ChatViewModel(object):
 
     def get_current_user(self):
         return self.current_user
+
+    def stop_updating(self):
+        self.active = False
