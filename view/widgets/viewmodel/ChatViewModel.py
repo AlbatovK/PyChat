@@ -4,13 +4,13 @@ from threading import Thread
 from PyQt5.QtWidgets import QApplication
 
 from domain.assetmanager import load_theme
-from model.ThemeEnum import Theme
-from model.dao.SettingsDao import SettingsDao
-from model.repo.MainRepo import mainRepo
 from model.Message import Message
-from model.dao.MessageDao import MessageDao
+from model.ThemeEnum import Theme
 from model.User import User
+from model.dao.MessageDao import MessageDao
+from model.dao.SettingsDao import SettingsDao
 from model.dao.UserDao import UserDao
+from model.repo.MainRepo import mainRepo
 from model.repo.SettingsRepo import settings_repo
 from view.mvvm.LiveData import LiveData
 
@@ -68,18 +68,42 @@ class ChatViewModel(object):
                 self.messages.clear()
                 break
 
+    def get_messages(self):
+        valid = []
+
+        his = self.msg_dao.get_messages(self.to_user, self.current_user)
+        valid.extend(his)
+
+        my = self.msg_dao.get_messages(self.current_user, self.to_user)
+        valid.extend(my)
+
+        valid.sort(key=lambda x: x.date)
+
+        return valid
+
+    def archive_messages(self, file_name: str):
+        if not file_name or not self.to_user:
+            return
+
+        def archive():
+            with open(file_name, "w", encoding="utf-8", newline="\n") as file:
+                msgs = self.get_messages()
+                my = self.msg_dao.get_messages(self.current_user, self.to_user)
+
+                for msg in msgs:
+                    file.write(
+                        f"{msg.data} ; "
+                        f"{self.current_user.nickname if msg in my else self.to_user.nickname} ; "
+                        f"{msg.date}"
+                        "\n"
+                    )
+
+        Thread(target=archive, daemon=True).start()
+
     def fulfil_messages(self):
         if self.to_user is not None:
-            valid = []
-
-            his = self.msg_dao.get_messages(self.to_user, self.current_user)
-            valid.extend(his)
-
-            my = self.msg_dao.get_messages(self.current_user, self.to_user)
-            valid.extend(my)
-
-            valid.sort(key=lambda x: x.date)
-            res = list(map(lambda x: x.data, valid))
+            msgs = self.get_messages()
+            res = list(map(lambda x: x.data, msgs))
 
             if len(res) == 0:
                 self.messagesLive.data = []

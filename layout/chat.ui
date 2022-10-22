@@ -169,13 +169,33 @@
       <normaloff>.</normaloff>.</iconset>
     </property>
    </widget>
+   <widget class="QPushButton" name="archive_btn">
+    <property name="geometry">
+     <rect>
+      <x>300</x>
+      <y>204</y>
+      <width>51</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>Настройки</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset theme="settings">
+      <normaloff>.</normaloff>.</iconset>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1500</width>
+     <width>1700</width>
      <height>21</height>
     </rect>
    </property>

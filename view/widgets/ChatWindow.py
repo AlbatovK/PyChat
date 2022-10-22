@@ -1,11 +1,11 @@
 from PyQt5 import uic, QtCore
 from PyQt5.QtCore import QSize, pyqtSignal
-from PyQt5.QtWidgets import QMainWindow, QListWidgetItem
+from PyQt5.QtWidgets import QMainWindow, QListWidgetItem, QFileDialog, QMessageBox
 
 from domain.assetmanager import get_layout_path, get_icon
 from view.mvvm.Observer import Observer
-from view.widgets.viewmodel.ChatViewModel import ChatViewModel
 from view.widgets.SettingsWindow import SettingsWindow
+from view.widgets.viewmodel.ChatViewModel import ChatViewModel
 
 MAX_LINE_LENGTH = 60
 
@@ -47,6 +47,7 @@ class ChatWindow(QMainWindow):
 
         exit_ic, refresh_ic = get_icon("exit.png"), get_icon("refresh.png")
         settings_ic, send_ic = get_icon("settings.png"), get_icon("send.png")
+        archive_ic = get_icon("archive.png")
         avg_size, send_size = QSize(25, 25), QSize(30, 30)
 
         self.exit_btn.setIcon(exit_ic)
@@ -57,6 +58,8 @@ class ChatWindow(QMainWindow):
         self.settings_btn.setIconSize(avg_size)
         self.send_btn.setIcon(send_ic)
         self.send_btn.setIconSize(send_size)
+        self.archive_btn.setIcon(archive_ic)
+        self.archive_btn.setIconSize(avg_size)
 
         def on_messages_changed(messages):
             if self.messages_list.count() == 1 and self.messages_list.item(0).text() == "Начните диалог первым!":
@@ -83,7 +86,7 @@ class ChatWindow(QMainWindow):
 
         def on_users_changed(users):
             self.users_list.clear()
-            online_ic, not_online_ic = get_icon("online"), get_icon("not_online")
+            online_ic, not_online_ic = get_icon("online"), get_icon("offline")
 
             for item in users:
                 icon = online_ic if item.active else not_online_ic
@@ -115,6 +118,17 @@ class ChatWindow(QMainWindow):
             self.settings_dialog.show()
 
         self.settings_btn.clicked.connect(show_settings)
+
+        def archive_messages():
+            if self.viewModel.to_user is None:
+                QMessageBox.information(self, "Диалог не выбран", "Выберите диалог для архивирования")
+                return
+
+            file_name, _ = QFileDialog.getSaveFileName(
+                self, "Сохранить архив сообщений", "archive.txt", filter="Text files (*.txt)")
+            self.viewModel.archive_messages(file_name)
+
+        self.archive_btn.clicked.connect(archive_messages)
 
         self.show_request.connect(self.show)
 
