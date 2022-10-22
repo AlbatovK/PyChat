@@ -143,3 +143,4 @@ class ChatViewModel(object):
 
     def stop_updating(self):
         self.active = False
+        self.settings_dao.close()
