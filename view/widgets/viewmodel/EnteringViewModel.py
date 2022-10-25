@@ -42,8 +42,7 @@ class EnteringViewModel(object):
         try:
             user = self.auth.create_user_with_email_and_password(login + "@gmail.com", password)
             user = self.auth.refresh(user['refreshToken'])
-            user = self.create_and_save_user(login, user)
-            self.settings_dao.save_theme(user, Theme.DARK)
+            self.create_and_save_user(login, user)
             signal_finish.emit()
         except HTTPError as e:
             code, msg = parse_error_response(e)

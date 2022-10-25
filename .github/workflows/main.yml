@@ -21,7 +21,7 @@ jobs:
       
     - name: Build with Pyinstaller
       run: |
-        pyinstaller main.py
+        pyinstaller --noconsole main.py
     
     - uses: actions/upload-artifact@v2
       with:
