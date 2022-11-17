@@ -43,8 +43,6 @@ class ChatWindow(QMainWindow):
         self.setFixedSize(900, 600)
         self.viewModel.load_theme()
 
-        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
-
         exit_ic, refresh_ic = get_icon("exit.png"), get_icon("refresh.png")
         settings_ic, send_ic = get_icon("settings.png"), get_icon("send.png")
         archive_ic = get_icon("archive.png")
